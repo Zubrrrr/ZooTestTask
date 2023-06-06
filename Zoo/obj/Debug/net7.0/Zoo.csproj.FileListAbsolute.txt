@@ -1,0 +1,15 @@
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/bin/Debug/net7.0/Zoo
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/bin/Debug/net7.0/Zoo.deps.json
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/bin/Debug/net7.0/Zoo.runtimeconfig.json
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/bin/Debug/net7.0/Zoo.dll
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/bin/Debug/net7.0/Zoo.pdb
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/obj/Debug/net7.0/Zoo.csproj.AssemblyReference.cache
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/obj/Debug/net7.0/Zoo.GeneratedMSBuildEditorConfig.editorconfig
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/obj/Debug/net7.0/Zoo.AssemblyInfoInputs.cache
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/obj/Debug/net7.0/Zoo.AssemblyInfo.cs
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/obj/Debug/net7.0/Zoo.csproj.CoreCompileInputs.cache
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/obj/Debug/net7.0/Zoo.dll
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/obj/Debug/net7.0/refint/Zoo.dll
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/obj/Debug/net7.0/Zoo.pdb
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/obj/Debug/net7.0/Zoo.genruntimeconfig.cache
+/Users/cetyreedinicy/Projects/ZooOOP/Zoo/Zoo/obj/Debug/net7.0/ref/Zoo.dll
