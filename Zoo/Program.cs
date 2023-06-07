@@ -1,258 +1,255 @@
 ﻿using System;
 
-namespace ZooOOp
+public class Program
 {
-    public class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            Menu menu = new Menu();
-            menu.StartZoo();
-        }
+        Menu menu = new Menu();
+        menu.StartZoo();
+    }
+}
+
+public abstract class Animal
+{
+    private string _gender;
+    private int _age;
+    private Random _random = new Random();
+
+    public Animal(string type, string voice, int maxAge)
+    {
+        Type = type;
+        Voice = voice;
+        MaxAge = maxAge;
+        GenerateRandomGender();
+        GenerateRandomAge(maxAge);
     }
 
-    public interface ICloneable
+    public string Type { get; protected set; }
+    public string Voice { get; protected set; }
+    public int MaxAge { get; protected set; }
+
+    public void Show() => Console.WriteLine($"Животное - {Type} : Гендер животного - {_gender} : Возраст животного - {_age} лет : Животное издает звук - {Voice}");
+
+    public abstract Animal Clone();
+
+    protected void GenerateRandomGender()
     {
-        Animal Clone();
+        string[] genders = new string[] { "Самец", "Самка" };
+        int genderCode = _random.Next(genders.Length);
+        _gender = genders[genderCode];
     }
 
-    public abstract class Animal : ICloneable
+    protected void GenerateRandomAge(int maxAge) => _age = _random.Next(0, maxAge);
+}
+
+public class Lion : Animal
+{
+    public Lion() : base("Лев", "Рычит", 30)
     {
-        private string _gender;
-
-        private int _age;
-
-        private Random _random = new Random();
-
-        public Animal(string type, string voice, int maxAge)
-        {
-            Type = type;
-            Voice = voice;
-            MaxAge = maxAge;
-            GenerateRandomGender();
-            GenerateRandomAge(maxAge);
-        }
-
-        public string Type { get; protected set; }
-        public string Voice { get; protected set; }
-
-        public int MaxAge { get; protected set; }
-
-        public void Show() => Console.WriteLine($"Животное - {Type} : Гендер животного - {_gender} : Возраст животного - {_age} лет : Животное издает звук - {Voice}");
-
-        protected void GenerateRandomGender()
-        {
-            string[] genders = new string[] { "Самец", "Самка" };
-            int genderCode = _random.Next(genders.Length);
-            _gender = genders[genderCode];
-        }
-
-        protected void GenerateRandomAge(int maxAge) => _age = _random.Next(0, maxAge);
-
-        public abstract Animal Clone();
     }
 
-    public class Lion : Animal
+    public override Animal Clone()
     {
-        public Lion() : base("Лев", "Рычит", 30)
-        {
-        }
+        return (Animal)MemberwiseClone();
+    }
+}
 
-        public override Animal Clone()
-        {
-            return new Lion();
-        }
+public class Tiger : Animal
+{
+    public Tiger() : base("Тигр", "Мурлыкает", 20)
+    {
     }
 
-    public class Tiger : Animal
+    public override Animal Clone()
     {
-        public Tiger() : base("Тигр", "Мурлыкает", 20)
-        {
-        }
+        return (Animal)MemberwiseClone();
+    }
+}
 
-        public override Animal Clone()
-        {
-            return new Tiger();
-        }
+public class Bear : Animal
+{
+    public Bear() : base("Медведь", "Ревет", 50)
+    {
     }
 
-    public class Bear : Animal
+    public override Animal Clone()
     {
-        public Bear() : base("Медведь", "Ревет", 50)
-        {
-        }
+        return (Animal)MemberwiseClone();
+    }
+}
 
-        public override Animal Clone()
-        {
-            return new Bear();
-        }
+public class Monkey : Animal
+{
+    public Monkey() : base("Обезьяна", "Кричит", 25)
+    {
     }
 
-    public class Monkey : Animal
+    public override Animal Clone()
     {
-        public Monkey() : base("Обезьяна", "Кричит", 25)
-        {
-        }
+        return (Animal)MemberwiseClone();
+    }
+}
 
-        public override Animal Clone()
-        {
-            return new Monkey();
-        }
+public class Aviary
+{
+    private List<Animal> _animals = new List<Animal>();
+
+    public void AddAnimal(Animal animal)
+    {
+        _animals.Add(animal);
     }
 
-    public class Aviary
+    public void ShowAnimals()
     {
-        private List<ICloneable> _animals = new List<ICloneable>();
-
-        public void AddAnimal(ICloneable animal)
+        for (int i = 0; i < _animals.Count; i++)
         {
-            _animals.Add(animal);
+            int animalNumber = i + 1;
+
+            Console.Write($"{animalNumber}) ");
+
+            Animal animal = _animals[i];
+
+            animal.Show();
         }
+    }
+}
 
-        public void ShowAnimals()
+public class Zoo
+{
+    private List<Aviary> _aviaries = new List<Aviary>();
+    private Dictionary<string, Func<Animal>> animalTypes = new Dictionary<string, Func<Animal>>();
+    private Random _random = new Random();
+
+    public Zoo()
+    {
+        animalTypes.Add("Лев", () => new Lion());
+        animalTypes.Add("Тигр", () => new Tiger());
+        animalTypes.Add("Медведь", () => new Bear());
+        animalTypes.Add("Обезьяна", () => new Monkey());
+    }
+
+    public void FillAviaries()
+    {
+        int maxCapacityAviary = 5;
+        int maxAnimal = _random.Next(1, maxCapacityAviary + 1);
+
+        foreach (string type in GetAnimalTypes())
         {
-            for (int i = 0; i < _animals.Count; i++)
+            Aviary aviary = new Aviary();
+
+            for (int i = 0; i < maxAnimal; i++)
             {
-                int animalNumber = i + 1;
+                Animal animal = CreateAnimalInstance(type);
 
-                Console.Write($"{animalNumber}) ");
-
-                Animal animal = _animals[i].Clone() as Animal;
-
-                animal.Show();
+                aviary.AddAnimal(animal);
             }
+
+            _aviaries.Add(aviary);
         }
     }
 
-    public class Zoo
+    public void ShowAviary(int index)
     {
-        private Dictionary<string, Aviary> _aviaries = new Dictionary<string, Aviary>();
-        private Dictionary<string, Func<Animal>> animalTypes = new Dictionary<string, Func<Animal>>
-    {
-        { "Лев", () => new Lion() },
-        { "Тигр", () => new Tiger() },
-        { "Медведь", () => new Bear() },
-        { "Обезьяна", () => new Monkey() }
-    };
-
-        private Random _random = new Random();
-
-        public void FillAviaries()
+        if (index >= 0 && index < _aviaries.Count)
         {
-            int maxCapacityAviary = 5;
+            Console.Clear();
+            Console.WriteLine($"Вы находитесь у вольера номер {index + 1}:");
 
-            foreach (string type in GetAnimalTypes())
-            {
-                Aviary aviary = new Aviary();
+            _aviaries[index].ShowAnimals();
 
-                for (int i = 0; i < _random.Next(1, maxCapacityAviary + 1); i++)
-                {
-                    Animal animal = CreateAnimalInstance(type);
+            Console.ReadKey();
+        }
+        else
+        {
+            Console.WriteLine("Такого вольера не существует.");
+        }
+    }
 
-                    aviary.AddAnimal(animal);
-                }
+    public int GetAviaryCount()
+    {
+        return _aviaries.Count;
+    }
 
-                _aviaries.Add(type, aviary);
-            }
+    private List<string> GetAnimalTypes()
+    {
+        List<string> types = new List<string>();
+
+        foreach (string animalType in animalTypes.Keys)
+        {
+            types.Add(animalType);
         }
 
-        public void ShowAviary(string animalType)
+        return types;
+    }
+
+    private Animal CreateAnimalInstance(string animalType)
+    {
+        if (animalTypes.ContainsKey(animalType))
         {
-            if (_aviaries.ContainsKey(animalType))
+            return animalTypes[animalType].Invoke();
+        }
+        else
+            throw new ArgumentException("Недопустимый тип животного.");
+    }
+}
+
+public class Menu
+{
+    private bool _isWorking = true;
+    private Zoo _zoo = new Zoo();
+
+    public void StartZoo()
+    {
+        _zoo.FillAviaries();
+
+        while (_isWorking)
+        {
+            Console.Clear();
+            Console.WriteLine($"Текущее количество вольеров: {_zoo.GetAviaryCount()}\n"+
+               $"{(int)Command.ShowAviary} - Подойти к вольеру\n" +
+               $"{(int)Command.ExitProgram} - Покинуть зоопарк");
+
+            string userInput = Console.ReadLine();
+
+            if (int.TryParse(userInput, out int command))
             {
-                Console.Clear();
-                Console.WriteLine($"Вы находитесь у вольера с {animalType}ами:");
-
-                _aviaries[animalType].ShowAnimals();
-
-                Console.ReadKey();
+                HandleCommand(command);
             }
             else
             {
-                Console.WriteLine("Такого вольера не существует.");
+                Console.WriteLine("Некорректный ввод");
             }
-        }
-
-        private List<string> GetAnimalTypes()
-        {
-            return new List<string> { "Лев", "Тигр", "Медведь", "Обезьяна" };
-        }
-
-        private Animal CreateAnimalInstance(string animalType)
-        {
-            if (animalTypes.ContainsKey(animalType))
-            {
-                return animalTypes[animalType].Invoke();
-            }
-            else
-                throw new ArgumentException("Недопустимый тип животного.");
         }
     }
 
-    public class Menu
+    private void HandleCommand(int command)
     {
-        private enum Command
+        if (command == (int)Command.ShowAviary)
         {
-            ShowAviaryLion = 1,
-            ShowAviaryTiger,
-            ShowAviaryBear,
-            ShowAviaryMonkey,
-            ExitProgram
-        }
+            Console.WriteLine("Введите номер вольера:");
 
-        private bool _isWorking = true;
-
-        private Zoo _zoo = new Zoo();
-
-        public void StartZoo()
-        {
-            _zoo.FillAviaries();
-
-            while (_isWorking)
+            if (int.TryParse(Console.ReadLine(), out int aviaryIndex))
             {
-                Console.Clear();
-                Console.WriteLine($"{(int)Command.ShowAviaryLion} - Подойти к вольеру со Львами\n" +
-                    $"{(int)Command.ShowAviaryTiger} - Подойти к вольеру с Тиграми\n" +
-                    $"{(int)Command.ShowAviaryBear} - Подойти к вольеру с Медведями\n" +
-                    $"{(int)Command.ShowAviaryMonkey} - Подойти к вольеру с Обезьянами\n" +
-                    $"{(int)Command.ExitProgram} - Покинуть зоопарк");
-
-                string userInput = Console.ReadLine();
-
-                if (Enum.TryParse(userInput, out Command command))
-                {
-                    HandleCommand(command);
-                }
-                else
-                {
-                    Console.WriteLine("Некорректный ввод");
-                }
+                _zoo.ShowAviary(aviaryIndex - 1);
+            }
+            else
+            {
+                Console.WriteLine("Некорректный номер вольера");
             }
         }
-
-        private void HandleCommand(Command command)
+        else if (command == (int)Command.ExitProgram)
         {
-            switch (command)
-            {
-                case Command.ShowAviaryLion:
-                    _zoo.ShowAviary("Лев");
-                    break;
-                case Command.ShowAviaryTiger:
-                    _zoo.ShowAviary("Тигр");
-                    break;
-                case Command.ShowAviaryBear:
-                    _zoo.ShowAviary("Медведь");
-                    break;
-                case Command.ShowAviaryMonkey:
-                    _zoo.ShowAviary("Обезьяна");
-                    break;
-                case Command.ExitProgram:
-                    _isWorking = false;
-                    break;
-                default:
-                    Console.WriteLine("Некорректный ввод");
-                    break;
-            }
+            _isWorking = false;
         }
+        else
+        {
+            Console.WriteLine("Некорректный ввод");
+        }
+    }
+
+    private enum Command
+    {
+        ShowAviary = 1,
+        ExitProgram
     }
 }
